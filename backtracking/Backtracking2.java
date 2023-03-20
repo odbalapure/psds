@@ -3,7 +3,7 @@ package PSDS.backtracking;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Session2 {
+public class Backtracking2 {
 
   /**
    * Sudoku solver 9 X 9 grid
@@ -186,7 +186,7 @@ public class Session2 {
 
     if (A[i][j] == 0) {
       A[i][j] = 1;
-      path.add("[]" + i + ", " + j + "]");
+      path.add("[" + i + ", " + j + "]");
       ratInMaze(A, N, M, i - 1, j, path);
       ratInMaze(A, N, M, i, j - 1, path);
       ratInMaze(A, N, M, i + 1, j, path);
