@@ -7,7 +7,7 @@ public class DP2 {
    * NOTE: A person can party alone as well
    * 
    * OBSERVATION
-   * - A person can pr cannot be part of a group/pair
+   * - A person can or cannot be part of a group/pair
    * - For p1, p2, p3, p4, p5
    * \_ p5 makes a pair with p1, result is => {p1, p5} {p2, p3, p4} and so on
    * \_ If p5 wishes to stay alone => ways(4)
