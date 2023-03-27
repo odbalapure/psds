@@ -94,11 +94,13 @@ public class DP4 {
       }
     }
 
-    return dp[N][M];
+    return dp[N - 1][M - 1];
   }
 
   public static void main(String[] args) {
     System.out.println(noOfWaysToReach(3, 3)); // 6
-    System.out.println(noOfWaysToReach(4, 5)); // 35
+    System.out.println(noOfWaysToReach(4, 5)); // 34
+    int[][] A = { { 1, 1, 1 }, { 1, 0, 1 }, { 1, 1, 1 } }; // 2
+    System.out.println(noOfWaysToReachBlocked(A, A.length, A[0].length));
   }
 }
