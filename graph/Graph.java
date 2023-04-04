@@ -1,6 +1,9 @@
 package PSDS.graph;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+
+import java.util.Queue;
 
 /**
  * =================================
@@ -49,6 +52,29 @@ import java.util.ArrayList;
  * \_ Undirected: O(V + 2E)
  * - Space: Less space required than matrix
  * 
+ * 
+ * -------------------
+ * BFS APPLICATIONS
+ * -------------------
+ * - Shortest path in unweighted graph
+ * - Crawlers in search engines
+ * - Social network search
+ * - Cycle detection
+ * - Broadcasting in a network
+ * 
+ * -------------------
+ * DFS APPLICATIONS
+ * -------------------
+ * - Cycle detection
+ * - Strongly connected components
+ * \_ Kosaraju: 2 DFS traversal
+ * \_ Tarjan: 1 DFS traversal
+ * - Topological sorting
+ * \_ Used for dependency graphs
+ * \_ When you have dependencies among  the jobs and we need to schedule the jobs
+ * \_ Eg: Makefile utility
+ * - Solving maze problems
+ * 
  */
 
 public class Graph {
@@ -70,19 +96,129 @@ public class Graph {
     }
   }
 
-  public static void main(String[] args) {
-    int V = 5;
-    ArrayList<ArrayList<Integer>> adjList = new ArrayList<ArrayList<Integer>>(V);
-    for (int i = 0; i < V; i++) {
-      // Each index/vertex will contain an ArrayList
-      adjList.add(new ArrayList<>());
+  /**
+   * BFS Traversal of a Graph
+   * 
+   * @param adjList
+   * @param V
+   * @param S
+   * 
+   *                COMPLEXITY
+   *                Time: O(V + E) | Every node & edge is explored
+   *                Space: O(V) | Array to store visited nodes
+   */
+  public static void bfsTraversal(ArrayList<ArrayList<Integer>> adjList, int S, boolean[] visited) {
+    Queue<Integer> queue = new LinkedList<>();
+    visited[S] = true;
+    queue.add(S);
+
+    while (!queue.isEmpty()) {
+      int u = queue.poll();
+      System.out.print(u + " ");
+
+      for (int v : adjList.get(u)) {
+        if (!visited[v]) {
+          visited[v] = true;
+          queue.add(v);
+        }
+      }
     }
+  }
 
-    addEdge(adjList, 0, 1);
-    addEdge(adjList, 0, 2);
-    addEdge(adjList, 1, 2);
-    addEdge(adjList, 1, 3);
+  /**
+   * BFS Traversal with disconnected nodes
+   * \_ Count disconnected components
+   * \_ Find no. of islands
+   * 
+   * @param adjList
+   * @param V
+   * @param S
+   * 
+   *                COMPLEXITY
+   *                Time: O(V + E) | Since graph is disconnected
+   *                Space: O(V) | Array to store visited nodes
+   */
+  public static void bfsTraversalDisconnected(ArrayList<ArrayList<Integer>> adjList, int V) {
+    int count = 0;
+    boolean[] visited = new boolean[V + 1];
+    for (int i = 0; i < V; i++) {
+      if (!visited[i]) {
+        count++;
+        bfsTraversal(adjList, i, visited);
+      }
+    }
+    System.out.println("NO OF ISLANDS: " + count);
+  }
 
-    printAdjList(adjList);
+  /**
+   * DFS Traversal of a Graph
+   * 
+   * @param adjList
+   * @param V
+   */
+  public static void dfsTraversal(ArrayList<ArrayList<Integer>> adjList, int V) {
+    boolean[] visited = new boolean[V + 1];
+    int count = 0;
+    // dfsHelper(adjList, V, visited);
+    for (int i = 0; i < V; i++) {
+      if (!visited[i]) {
+        count++;
+        dfsHelper(adjList, i, visited);
+      }
+    }
+    System.out.println("NO OF ISLANDS: " + count);
+  }
+
+  public static void dfsHelper(ArrayList<ArrayList<Integer>> adjList, int S, boolean[] visited) {
+    visited[S] = true;
+    System.out.print(S + " ");
+    for (int u : adjList.get(S)) {
+      if (!visited[u]) {
+        dfsHelper(adjList, u, visited);
+      }
+    }
+  }
+
+  public static void main(String[] args) {
+    // int V = 5;
+    // ArrayList<ArrayList<Integer>> adjList = new ArrayList<ArrayList<Integer>>(V);
+    // for (int i = 0; i < V; i++) {
+    // // Each index/vertex will contain an ArrayList
+    // adjList.add(new ArrayList<>());
+    // }
+    // addEdge(adjList, 0, 1);
+    // addEdge(adjList, 0, 2);
+    // addEdge(adjList, 1, 2);
+    // addEdge(adjList, 1, 3);
+    // printAdjList(adjList);
+    // 1 2
+    // 0 2 3
+    // 0 1
+    // 1
+
+    // int V = 7;
+    // ArrayList<ArrayList<Integer>> adj = new ArrayList<ArrayList<Integer>>(V);
+    // for (int i = 0; i < V; i++) {
+    // adj.add(new ArrayList<Integer>());
+    // }
+    // addEdge(adj, 0, 1);
+    // addEdge(adj, 0, 2);
+    // addEdge(adj, 2, 3);
+    // addEdge(adj, 1, 3);
+    // addEdge(adj, 4, 5);
+    // addEdge(adj, 5, 6);
+    // addEdge(adj, 4, 6);
+    // bfsTraversalDisconnected(adj, V); // [0 1 2 3 4 5 6] 2
+
+    // int V = 5;
+    // ArrayList<ArrayList<Integer>> adj = new ArrayList<ArrayList<Integer>>(V);
+    // for (int i = 0; i < V; i++) {
+    // adj.add(new ArrayList<Integer>());
+    // }
+    // addEdge(adj, 0, 1);
+    // addEdge(adj, 0, 2);
+    // addEdge(adj, 1, 2);
+    // addEdge(adj, 3, 4);
+    // dfsTraversal(adj, V); // [0 1 2 3 4] 2
   }
 }
