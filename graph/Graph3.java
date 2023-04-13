@@ -3,6 +3,9 @@ package PSDS.graph;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Queue;
+
+import javax.swing.plaf.TreeUI;
 
 public class Graph3 {
   public static void addEdge(ArrayList<ArrayList<Integer>> adjList, int u, int v) {
@@ -47,6 +50,53 @@ public class Graph3 {
   }
 
   /**
+   * Detect cycle in directed graph using Kahn's algorithm
+   * 
+   * APPROACH
+   * - Find indegree edges of every vertex
+   * - Store vertices whose indegrees are 0 inside the queue
+   * - If indegrees get 0 then add it to the queue
+   * - If the count == V then there's no cycle since all vertices are processed
+   * 
+   * @param adj
+   * @param V
+   * @return
+   */
+  public static boolean detectCycleKahnTopologicalSort(ArrayList<ArrayList<Integer>> adj, int V) {
+    int[] inDegree = new int[V];
+    int count = 0;
+    for (int u = 0; u < V; u++) {
+      for (int x : adj.get(u)) {
+        inDegree[x]++;
+      }
+    }
+
+    Queue<Integer> queue = new LinkedList<>();
+    for (int i = 0; i < V; i++) {
+      if (inDegree[i] == 0) {
+        queue.add(i);
+      }
+    }
+
+    while (!queue.isEmpty()) {
+      int u = queue.poll();
+      for (int x : adj.get(u)) {
+        if (--inDegree[x] == 0) {
+          queue.add(x);
+        }
+      }
+
+      count++;
+    }
+
+    if (count != V) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Topological Sorting
    * 
    * We consider nodes as jobs and directed edges as dependencies
@@ -55,7 +105,7 @@ public class Graph3 {
    * 
    * APPROACH
    * - Find indegree edges of every vertex
-   * - Store vertices whose indegrees are 0
+   * - Store vertices whose indegrees are 0 inside the queue
    * - If indegrees get 0 then add it to the queue
    * 
    * @param adj
@@ -106,7 +156,7 @@ public class Graph3 {
    * \_ u = pq.extractMin() -> O(logV)
    * \_ Relax adjacent of u that are not in pq -> O(logV)
    * 
-   * Using adjacency list and min heap the complexity will be 
+   * Using adjacency list and min heap the complexity will be
    * \_ O(VlogV) + O(V + E) X log(V)
    * \_ Hence, O(V + E) X log(V)
    * 
@@ -185,9 +235,24 @@ public class Graph3 {
     // topologicalSort(adj, V); // 0 1 2 4 3
 
     // int graph[][] = new int[][] { { 0, 50, 100, 0 },
-    //     { 50, 0, 30, 200 },
-    //     { 100, 30, 0, 20 },
-    //     { 0, 200, 20, 0 }, };
+    // { 50, 0, 30, 200 },
+    // { 100, 30, 0, 20 },
+    // { 0, 200, 20, 0 }, };
     // System.out.println(Arrays.toString(dijkstraAlgo(graph, 0))); // 0 50 80 100
+
+    // int V = 5;
+    // ArrayList<ArrayList<Integer>> adj = new ArrayList<ArrayList<Integer>>(V);
+
+    // for (int i = 0; i < V; i++) {
+    // adj.add(new ArrayList<Integer>());
+    // }
+
+    // addEdge(adj, 0, 1);
+    // addEdge(adj, 4, 1);
+    // addEdge(adj, 1, 2);
+    // addEdge(adj, 2, 3);
+    // addEdge(adj, 3, 1);
+    // System.out.println("Is there a cycle: " + detectCycleKahnTopologicalSort(adj,
+    // V)); // true
   }
 }
